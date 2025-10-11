@@ -38,7 +38,7 @@ const formSchema = z.object({
   jobLink: z.string().url('Must be a valid URL').optional().or(z.literal('')),
   tailored: z.boolean().default(false),
   jobDescription: z.string().optional(),
-  referral: z.string().optional(),
+  referral: z.boolean().default(false),
 });
 
 type FormValues = z.infer<typeof formSchema>;
@@ -62,7 +62,7 @@ export const AddJobModal = ({ open, onOpenChange, onSubmit }: AddJobModalProps) 
       jobLink: '',
       tailored: false,
       jobDescription: '',
-      referral: '',
+      referral: false,
     },
   });
 
@@ -177,12 +177,19 @@ export const AddJobModal = ({ open, onOpenChange, onSubmit }: AddJobModalProps) 
               control={form.control}
               name="referral"
               render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Referral (Optional)</FormLabel>
+                <FormItem className="flex items-center justify-between rounded-lg border border-border p-4">
+                  <div className="space-y-0.5">
+                    <FormLabel>Referral</FormLabel>
+                    <div className="text-sm text-muted-foreground">
+                      Do you have a referral for this position?
+                    </div>
+                  </div>
                   <FormControl>
-                    <Input placeholder="John Doe" {...field} />
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
                   </FormControl>
-                  <FormMessage />
                 </FormItem>
               )}
             />

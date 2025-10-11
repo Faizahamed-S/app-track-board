@@ -8,7 +8,7 @@ export interface JobApplication {
   jobLink?: string;
   tailored: boolean;
   jobDescription?: string;
-  referral?: string;
+  referral?: boolean;
   status: JobStatus;
 }
 

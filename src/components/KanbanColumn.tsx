@@ -23,26 +23,27 @@ export const KanbanColumn = ({ status, jobs, onEdit, onDelete }: KanbanColumnPro
   const config = STATUS_CONFIG[status];
 
   return (
-    <div className="flex flex-col h-full">
-      <div className={`rounded-t-lg border-2 border-b-0 ${config.colorClass} p-4`}>
-        <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-foreground">{config.label}</h3>
-          <Badge variant="secondary" className="ml-2">
-            {jobs.length}
-          </Badge>
-        </div>
-      </div>
-      
-      <div
-        ref={setNodeRef}
-        className="flex-1 bg-muted/30 rounded-b-lg border-2 border-t-0 border-border p-4 space-y-3 min-h-[500px] overflow-y-auto"
-      >
-        <SortableContext items={jobs.map(j => j.id)} strategy={verticalListSortingStrategy}>
-          {jobs.map((job) => (
-            <JobCard key={job.id} job={job} onEdit={onEdit} onDelete={onDelete} />
-          ))}
-        </SortableContext>
-      </div>
-    </div>
+ <div className={`flex flex-col h-full rounded-lg border-2 ${config.colorClass}`}>
+   <div className="p-4 border-b-2">
+     <div className="flex items-center justify-between">
+       <h3 className="font-semibold text-foreground">{config.label}</h3>
+       <Badge variant="secondary" className="ml-2">
+         {jobs.length}
+       </Badge>
+     </div>
+   </div>
+
+   <div
+     ref={setNodeRef}
+     className="flex-1 p-4 space-y-3 min-h-[500px] overflow-y-auto"
+   >
+     <SortableContext items={jobs.map(j => j.id)} strategy={verticalListSortingStrategy}>
+       {jobs.map((job) => (
+         <JobCard key={job.id} job={job} onEdit={onEdit} onDelete={onDelete} />
+       ))}
+     </SortableContext>
+   </div>
+ </div>
+
   );
 };

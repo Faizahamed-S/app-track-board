@@ -1,14 +1,15 @@
 import { JobApplication, CreateJobApplication, UpdateJobApplication, JobStatus } from '@/types/job';
 
-const API_BASE_URL = '/board';
+// Base URL stops at /board
+const API_BASE_URL = 'http://localhost:8080/board';
 
 export const jobApi = {
   // Fetch all job applications
   getAllApplications: async (status?: JobStatus): Promise<JobApplication[]> => {
-    const url = status 
+    const url = status
       ? `${API_BASE_URL}/applications?status=${status}`
       : `${API_BASE_URL}/applications`;
-    
+
     const response = await fetch(url);
     if (!response.ok) throw new Error('Failed to fetch applications');
     return response.json();
@@ -43,7 +44,7 @@ export const jobApi = {
     return response.json();
   },
 
-  // Partial update (e.g., status only)
+  // Partial update (PATCH)
   patchApplication: async (id: string, data: UpdateJobApplication): Promise<JobApplication> => {
     const response = await fetch(`${API_BASE_URL}/applications/${id}`, {
       method: 'PATCH',
