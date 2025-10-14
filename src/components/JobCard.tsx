@@ -20,7 +20,14 @@ export const JobCard = ({ job, onEdit, onDelete }: JobCardProps) => {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: job.id });
+  } = useSortable({ 
+    id: job.id,
+    data: {
+      type: 'job',
+      job: job,
+      status: job.status
+    }
+  });
 
   const style = {
     transform: CSS.Transform.toString(transform),

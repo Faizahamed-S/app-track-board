@@ -122,14 +122,31 @@ export const JobKanbanBoard = () => {
     const jobId = active.id as string;
     const overId = over.id as string;
 
-    // Validate that the drop target is a valid status, not a job ID
-    const validStatuses = ['APPLIED', 'REJECTED', 'ONLINE_ASSESSMENT', 'INTERVIEW', 'OFFER'];
-    if (!validStatuses.includes(overId)) {
-      console.log('Drag and Drop - Invalid drop target (not a status):', overId);
-      return;
+    // If dropping on a job card, find which column it belongs to
+    let newStatus: JobStatus;
+    
+    if (over.data?.current?.type === 'status') {
+      // Dropped directly on column
+      newStatus = over.data.current.status;
+      console.log('Drag and Drop - Dropped on column:', newStatus);
+    } else {
+      // Dropped on a job card - find which column the target job is in
+      const targetJob = applications.find((j) => j.id === overId);
+      if (targetJob) {
+        newStatus = targetJob.status;
+        console.log('Drag and Drop - Dropped on job card in column:', newStatus);
+      } else {
+        // Fallback: check if overId is a valid status
+        const validStatuses = ['APPLIED', 'REJECTED', 'ONLINE_ASSESSMENT', 'INTERVIEW', 'OFFER'];
+        if (validStatuses.includes(overId)) {
+          newStatus = overId as JobStatus;
+          console.log('Drag and Drop - Dropped on status:', newStatus);
+        } else {
+          console.log('Drag and Drop - Invalid drop target:', overId);
+          return;
+        }
+      }
     }
-
-    const newStatus = overId as JobStatus;
 
     console.log('Drag and Drop - Job ID:', jobId);
     console.log('Drag and Drop - New Status:', newStatus, 'Type:', typeof newStatus);
