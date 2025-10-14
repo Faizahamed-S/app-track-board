@@ -34,7 +34,9 @@ const formSchema = z.object({
   companyName: z.string().min(1, 'Company name is required'),
   roleName: z.string().min(1, 'Role name is required'),
   dateOfApplication: z.string().min(1, 'Date is required'),
-  status: z.enum(['APPLIED', 'INTERVIEW', 'OFFER', 'REJECTED']),
+  status: z.enum(['APPLIED', 'REJECTED', 'ONLINE_ASSESSMENT', 'INTERVIEW', 'OFFER'], {
+    errorMap: () => ({ message: 'Please select a valid status' })
+  }),
   jobLink: z.string().url('Must be a valid URL').optional().or(z.literal('')),
   tailored: z.boolean().default(false),
   jobDescription: z.string().optional(),
@@ -67,6 +69,9 @@ export const AddJobModal = ({ open, onOpenChange, onSubmit }: AddJobModalProps) 
   });
 
   const handleSubmit = async (data: FormValues) => {
+    console.log('AddJobModal - Form data before submit:', data);
+    console.log('AddJobModal - Status value:', data.status, 'Type:', typeof data.status);
+    
     setIsSubmitting(true);
     try {
       await onSubmit(data);
@@ -140,7 +145,7 @@ export const AddJobModal = ({ open, onOpenChange, onSubmit }: AddJobModalProps) 
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Status</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select status" />
@@ -148,9 +153,10 @@ export const AddJobModal = ({ open, onOpenChange, onSubmit }: AddJobModalProps) 
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="APPLIED">Applied</SelectItem>
+                        <SelectItem value="REJECTED">Rejected</SelectItem>
+                        <SelectItem value="ONLINE_ASSESSMENT">Online Assessment</SelectItem>
                         <SelectItem value="INTERVIEW">Interview</SelectItem>
                         <SelectItem value="OFFER">Offer</SelectItem>
-                        <SelectItem value="REJECTED">Rejected</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

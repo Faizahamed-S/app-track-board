@@ -34,7 +34,7 @@ const formSchema = z.object({
   companyName: z.string().min(1, 'Company name is required'),
   roleName: z.string().min(1, 'Role name is required'),
   dateOfApplication: z.string().min(1, 'Date is required'),
-  status: z.enum(['APPLIED', 'INTERVIEW', 'OFFER', 'REJECTED']),
+  status: z.enum(['APPLIED', 'REJECTED', 'ONLINE_ASSESSMENT', 'INTERVIEW', 'OFFER']),
   jobLink: z.string().url('Must be a valid URL').optional().or(z.literal('')),
   tailored: z.boolean().default(false),
   jobDescription: z.string().optional(),
@@ -165,9 +165,10 @@ export const EditJobModal = ({ open, onOpenChange, job, onSubmit }: EditJobModal
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="APPLIED">Applied</SelectItem>
+                        <SelectItem value="REJECTED">Rejected</SelectItem>
+                        <SelectItem value="ONLINE_ASSESSMENT">Online Assessment</SelectItem>
                         <SelectItem value="INTERVIEW">Interview</SelectItem>
                         <SelectItem value="OFFER">Offer</SelectItem>
-                        <SelectItem value="REJECTED">Rejected</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />

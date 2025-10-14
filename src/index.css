@@ -41,12 +41,14 @@ All colors MUST be HSL.
     /* Status Colors */
     --status-applied: 221 83% 53%;
     --status-applied-bg: 221 83% 95%;
+    --status-rejected: 215 16% 47%;
+    --status-rejected-bg: 215 16% 95%;
+    --status-online-assessment: 280 100% 70%;
+    --status-online-assessment-bg: 280 100% 95%;
     --status-interview: 38 92% 50%;
     --status-interview-bg: 38 92% 95%;
     --status-offer: 142 76% 36%;
     --status-offer-bg: 142 76% 95%;
-    --status-rejected: 215 16% 47%;
-    --status-rejected-bg: 215 16% 95%;
 
     /* Shadows */
     --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.1);
@@ -106,12 +108,14 @@ All colors MUST be HSL.
     /* Status Colors - Dark Mode */
     --status-applied: 221 83% 53%;
     --status-applied-bg: 221 83% 20%;
+    --status-rejected: 215 16% 47%;
+    --status-rejected-bg: 215 16% 20%;
+    --status-online-assessment: 280 100% 70%;
+    --status-online-assessment-bg: 280 100% 20%;
     --status-interview: 38 92% 50%;
     --status-interview-bg: 38 92% 20%;
     --status-offer: 142 76% 36%;
     --status-offer-bg: 142 76% 20%;
-    --status-rejected: 215 16% 47%;
-    --status-rejected-bg: 215 16% 20%;
 
     /* Shadows */
     --shadow-card: 0 1px 3px 0 rgb(0 0 0 / 0.3);
