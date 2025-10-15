@@ -28,6 +28,14 @@ export const jobApi = {
     return transformFromBackend(result);
   },
 
+  // Fetch applications by status
+  getApplicationsByStatus: async (status: JobStatus): Promise<JobApplication[]> => {
+    const response = await fetch(`${API_BASE_URL}/applications/status/${status}`);
+    if (!response.ok) throw new Error('Failed to fetch applications by status');
+    const result = await response.json();
+    return result.map(transformFromBackend);
+  },
+
   // Create new application
   createApplication: async (data: CreateJobApplication): Promise<JobApplication> => {
     console.log('Creating application with data:', data);

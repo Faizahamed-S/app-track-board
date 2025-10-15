@@ -1,5 +1,6 @@
 import { useDroppable } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useNavigate } from 'react-router-dom';
 import { JobApplication, JobStatus } from '@/types/job';
 import { JobCard } from './JobCard';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +22,7 @@ const STATUS_CONFIG: Record<JobStatus, { label: string; colorClass: string }> = 
 };
 
 export const KanbanColumn = ({ status, jobs, onEdit, onDelete, onViewDetails }: KanbanColumnProps) => {
+  const navigate = useNavigate();
   const { setNodeRef, isOver } = useDroppable({ 
     id: status,
     data: {
@@ -30,15 +32,25 @@ export const KanbanColumn = ({ status, jobs, onEdit, onDelete, onViewDetails }: 
   });
   const config = STATUS_CONFIG[status];
 
+  const handleHeaderClick = (e: React.MouseEvent) => {
+    // Only navigate if not clicking on the badge
+    if (!(e.target as HTMLElement).closest('[data-badge]')) {
+      navigate(`/status/${status}`);
+    }
+  };
+
   return (
  <div 
    ref={setNodeRef}
    className={`flex flex-col h-full rounded-lg border-2 ${config.colorClass} shadow-sm transition-all duration-200 ${isOver ? 'ring-2 ring-primary ring-offset-2 bg-primary/5' : 'hover:bg-gray-50/50 dark:hover:bg-gray-800/50'}`}
  >
-   <div className="p-4 border-b-2 bg-white/50 dark:bg-gray-900/50">
+   <div 
+     className="p-4 border-b-2 bg-white/50 dark:bg-gray-900/50 cursor-pointer hover:bg-white/70 dark:hover:bg-gray-900/70 transition-colors"
+     onClick={handleHeaderClick}
+   >
      <div className="flex items-center justify-between">
        <h3 className="font-semibold text-foreground">{config.label}</h3>
-       <Badge variant="secondary" className="ml-2 font-medium">
+       <Badge variant="secondary" className="ml-2 font-medium" data-badge>
          {jobs.length}
        </Badge>
      </div>
