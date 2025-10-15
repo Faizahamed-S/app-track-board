@@ -10,9 +10,10 @@ interface JobCardProps {
   job: JobApplication;
   onEdit: (job: JobApplication) => void;
   onDelete: (id: string) => void;
+  onViewDetails: (id: string) => void;
 }
 
-export const JobCard = ({ job, onEdit, onDelete }: JobCardProps) => {
+export const JobCard = ({ job, onEdit, onDelete, onViewDetails }: JobCardProps) => {
   const {
     attributes,
     listeners,
@@ -41,9 +42,20 @@ export const JobCard = ({ job, onEdit, onDelete }: JobCardProps) => {
     year: 'numeric',
   });
 
+  const handleCardClick = (e: React.MouseEvent) => {
+    // Don't trigger if clicking on action buttons or drag handle
+    if ((e.target as HTMLElement).closest('button') || (e.target as HTMLElement).closest('[data-drag-handle]')) {
+      return;
+    }
+    onViewDetails(job.id);
+  };
+
   return (
     <div ref={setNodeRef} style={style} {...attributes} {...listeners}>
-      <Card className="cursor-grab active:cursor-grabbing hover:shadow-lg transition-all duration-200 border-border">
+      <Card 
+        className="cursor-grab active:cursor-grabbing hover:shadow-lg transition-all duration-200 border-border hover:border-primary/50"
+        onClick={handleCardClick}
+      >
         <CardHeader className="pb-3">
           <CardTitle className="text-base font-semibold text-foreground flex items-start justify-between gap-2">
             <span className="flex-1">{job.companyName}</span>

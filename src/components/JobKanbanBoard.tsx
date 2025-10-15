@@ -15,6 +15,7 @@ import { KanbanColumn } from './KanbanColumn';
 import { JobCard } from './JobCard';
 import { AddJobModal } from './AddJobModal';
 import { EditJobModal } from './EditJobModal';
+import { ApplicationDetailModal } from './ApplicationDetailModal';
 import { PaginationControls } from './PaginationControls';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
@@ -31,7 +32,9 @@ export const JobKanbanBoard = () => {
   const [activeJob, setActiveJob] = useState<JobApplication | null>(null);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [editingJob, setEditingJob] = useState<JobApplication | null>(null);
+  const [viewingJobId, setViewingJobId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(100);
 
@@ -193,6 +196,11 @@ export const JobKanbanBoard = () => {
     setIsEditModalOpen(true);
   };
 
+  const handleViewDetails = (id: string) => {
+    setViewingJobId(id);
+    setIsDetailModalOpen(true);
+  };
+
   const getJobsByStatus = (status: JobStatus) =>
     applications.filter((job) => job.status === status);
 
@@ -236,6 +244,7 @@ export const JobKanbanBoard = () => {
                 jobs={getJobsByStatus(status)}
                 onEdit={handleOpenEdit}
                 onDelete={handleDeleteJob}
+                onViewDetails={handleViewDetails}
               />
             ))}
           </div>
@@ -247,6 +256,7 @@ export const JobKanbanBoard = () => {
                   job={activeJob}
                   onEdit={() => {}}
                   onDelete={() => {}}
+                  onViewDetails={() => {}}
                 />
               </div>
             ) : null}
@@ -265,6 +275,14 @@ export const JobKanbanBoard = () => {
         onOpenChange={setIsEditModalOpen}
         job={editingJob}
         onSubmit={handleEditJob}
+      />
+
+      <ApplicationDetailModal
+        open={isDetailModalOpen}
+        onOpenChange={setIsDetailModalOpen}
+        applicationId={viewingJobId}
+        onEdit={handleOpenEdit}
+        onDelete={handleDeleteJob}
       />
 
       {/* Pagination Controls */}

@@ -9,6 +9,7 @@ interface KanbanColumnProps {
   jobs: JobApplication[];
   onEdit: (job: JobApplication) => void;
   onDelete: (id: string) => void;
+  onViewDetails: (id: string) => void;
 }
 
 const STATUS_CONFIG: Record<JobStatus, { label: string; colorClass: string }> = {
@@ -19,7 +20,7 @@ const STATUS_CONFIG: Record<JobStatus, { label: string; colorClass: string }> = 
   OFFER: { label: 'Offer', colorClass: 'bg-[hsl(var(--status-offer-bg))] border-[hsl(var(--status-offer))]' },
 };
 
-export const KanbanColumn = ({ status, jobs, onEdit, onDelete }: KanbanColumnProps) => {
+export const KanbanColumn = ({ status, jobs, onEdit, onDelete, onViewDetails }: KanbanColumnProps) => {
   const { setNodeRef, isOver } = useDroppable({ 
     id: status,
     data: {
@@ -55,7 +56,7 @@ export const KanbanColumn = ({ status, jobs, onEdit, onDelete }: KanbanColumnPro
            </div>
          ) : (
            jobs.map((job) => (
-             <JobCard key={job.id} job={job} onEdit={onEdit} onDelete={onDelete} />
+             <JobCard key={job.id} job={job} onEdit={onEdit} onDelete={onDelete} onViewDetails={onViewDetails} />
            ))
          )}
        </div>
