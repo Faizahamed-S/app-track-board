@@ -193,7 +193,7 @@ export const AllApplicationsTable = ({
               </TableRow>
             ) : (
               filteredAndSortedApplications.map((job) => (
-                <TableRow key={job.id}>
+                <TableRow key={job.id} className="group">
                   <TableCell>
                     <InlineStatusSelect
                       applicationId={job.id}
@@ -236,7 +236,7 @@ export const AllApplicationsTable = ({
                     )}
                   </TableCell>
                   <TableCell className="text-right">
-                    <div className="flex justify-end gap-2">
+                    <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                       <Button
                         variant="ghost"
                         size="sm"
@@ -254,6 +254,9 @@ export const AllApplicationsTable = ({
                         <Trash2 className="h-4 w-4 mr-2" />
                         Delete
                       </Button>
+                    </div>
+                    <div className="opacity-30 group-hover:opacity-0 transition-opacity duration-200">
+                      <span className="text-muted-foreground text-sm">⋮</span>
                     </div>
                   </TableCell>
                 </TableRow>
