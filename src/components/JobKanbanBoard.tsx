@@ -17,6 +17,8 @@ import { AddJobModal } from './AddJobModal';
 import { EditJobModal } from './EditJobModal';
 import { ApplicationDetailModal } from './ApplicationDetailModal';
 import { PaginationControls } from './PaginationControls';
+import { ViewToggle } from './ViewToggle';
+import { AllApplicationsTable } from './AllApplicationsTable';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 import { toast } from 'sonner';
@@ -37,6 +39,7 @@ export const JobKanbanBoard = () => {
   const [viewingJobId, setViewingJobId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(100);
+  const [currentView, setCurrentView] = useState<'kanban' | 'table'>('kanban');
 
   const queryClient = useQueryClient();
 
@@ -201,6 +204,11 @@ export const JobKanbanBoard = () => {
     setIsDetailModalOpen(true);
   };
 
+  const handleStatusChange = () => {
+    // Refresh the data when status changes
+    queryClient.invalidateQueries({ queryKey: ['job-applications'] });
+  };
+
   const getJobsByStatus = (status: JobStatus) =>
     applications.filter((job) => job.status === status);
 
@@ -231,37 +239,52 @@ export const JobKanbanBoard = () => {
           </Button>
         </div>
 
-        <DndContext
-          sensors={sensors}
-          onDragStart={handleDragStart}
-          onDragEnd={handleDragEnd}
-        >
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 xl:gap-6">
-            {STATUSES.map((status) => (
-              <KanbanColumn
-                key={status}
-                status={status}
-                jobs={getJobsByStatus(status)}
-                onEdit={handleOpenEdit}
-                onDelete={handleDeleteJob}
-                onViewDetails={handleViewDetails}
-              />
-            ))}
-          </div>
+        {/* View Toggle */}
+        <div className="mb-6">
+          <ViewToggle currentView={currentView} onViewChange={setCurrentView} />
+        </div>
 
-          <DragOverlay>
-            {activeJob ? (
-              <div className="rotate-3 scale-105">
-                <JobCard
-                  job={activeJob}
-                  onEdit={() => {}}
-                  onDelete={() => {}}
-                  onViewDetails={() => {}}
+        {/* Conditional Content Rendering */}
+        {currentView === 'kanban' ? (
+          <DndContext
+            sensors={sensors}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 xl:gap-6">
+              {STATUSES.map((status) => (
+                <KanbanColumn
+                  key={status}
+                  status={status}
+                  jobs={getJobsByStatus(status)}
+                  onEdit={handleOpenEdit}
+                  onDelete={handleDeleteJob}
+                  onViewDetails={handleViewDetails}
                 />
-              </div>
-            ) : null}
-          </DragOverlay>
-        </DndContext>
+              ))}
+            </div>
+
+            <DragOverlay>
+              {activeJob ? (
+                <div className="rotate-3 scale-105">
+                  <JobCard
+                    job={activeJob}
+                    onEdit={() => {}}
+                    onDelete={() => {}}
+                    onViewDetails={() => {}}
+                  />
+                </div>
+              ) : null}
+            </DragOverlay>
+          </DndContext>
+        ) : (
+          <AllApplicationsTable
+            applications={applications}
+            onEdit={handleOpenEdit}
+            onDelete={handleDeleteJob}
+            onStatusChange={handleStatusChange}
+          />
+        )}
       </div>
 
       <AddJobModal
